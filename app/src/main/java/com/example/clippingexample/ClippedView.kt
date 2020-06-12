@@ -97,7 +97,30 @@ class ClippedView @JvmOverloads constructor(
     }
 
     private fun drawIntersectionClippingExample(canvas: Canvas) {
-
+        canvas.save()
+        canvas.translate(columnTwo, rowTwo)
+        canvas.clipRect(
+            clipRectLeft, clipRectTop, clipRectRight - smallRectOffset,
+            clipRectBottom - smallRectOffset
+        )
+        if (checkSdkVersionIsSmallerThanVersionCodeO()) {
+            canvas.clipRect(
+                clipRectLeft + smallRectOffset,
+                clipRectTop + smallRectOffset,
+                clipRectRight,
+                clipRectBottom,
+                Region.Op.INTERSECT
+            )
+        } else {
+            canvas.clipRect(
+                clipRectLeft + smallRectOffset,
+                clipRectTop + smallRectOffset,
+                clipRectRight,
+                clipRectBottom
+            )
+        }
+        drawClippedRectangle(canvas)
+        canvas.restore()
     }
 
     private fun drawCircularClippingExample(canvas: Canvas) {
@@ -146,7 +169,8 @@ class ClippedView @JvmOverloads constructor(
         canvas.restore()
     }
 
-    private fun checkSdkVersionIsSmallerThanVersionCodeO() = Build.VERSION.SDK_INT < Build.VERSION_CODES.O
+    private fun checkSdkVersionIsSmallerThanVersionCodeO() =
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.O
 
     private fun drawBackAndUnclippedRectangle(canvas: Canvas) {
         canvas.drawColor(Color.GRAY)
