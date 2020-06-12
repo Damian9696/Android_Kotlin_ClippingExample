@@ -101,7 +101,24 @@ class ClippedView @JvmOverloads constructor(
     }
 
     private fun drawCircularClippingExample(canvas: Canvas) {
-
+        canvas.save()
+        canvas.translate(columnOne, rowTwo)
+        //Clears any lines curves from path but unlike reset(),
+        //keeps the internal data structure for faster reuse
+        path.rewind()
+        path.addCircle(
+            circleRadius,
+            clipRectBottom - circleRadius,
+            circleRadius,
+            Path.Direction.CCW
+        )
+        if (checkSdkVersionIsSmallerThanVersionCodeO()) {
+            canvas.clipPath(path, Region.Op.DIFFERENCE)
+        } else {
+            canvas.clipOutPath(path)
+        }
+        drawClippedRectangle(canvas)
+        canvas.restore()
     }
 
     private fun drawDifferenceClippingExample(canvas: Canvas) {
@@ -113,7 +130,7 @@ class ClippedView @JvmOverloads constructor(
             2 * rectInset, 2 * rectInset, clipRectRight - 2 * rectInset,
             clipRectBottom - 2 * rectInset
         )
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        if (checkSdkVersionIsSmallerThanVersionCodeO()) {
             canvas.clipRect(
                 4 * rectInset, 4 * rectInset,
                 clipRectRight - 4 * rectInset, clipRectBottom - 4 * rectInset,
@@ -128,6 +145,8 @@ class ClippedView @JvmOverloads constructor(
         drawClippedRectangle(canvas)
         canvas.restore()
     }
+
+    private fun checkSdkVersionIsSmallerThanVersionCodeO() = Build.VERSION.SDK_INT < Build.VERSION_CODES.O
 
     private fun drawBackAndUnclippedRectangle(canvas: Canvas) {
         canvas.drawColor(Color.GRAY)
