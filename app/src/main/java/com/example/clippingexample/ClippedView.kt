@@ -85,10 +85,6 @@ class ClippedView @JvmOverloads constructor(
     }
 
     private fun drawTranslatedTextExample(canvas: Canvas) {
-
-    }
-
-    private fun drawSkewedTextExample(canvas: Canvas) {
         canvas.save()
         //Apply transformation to canvas
         canvas.translate(columnTwo, textRow)
@@ -97,6 +93,17 @@ class ClippedView @JvmOverloads constructor(
         paint.textAlign = Paint.Align.LEFT
         //Draw text
         canvas.drawText(context.getString(R.string.translated), clipRectLeft, clipRectTop, paint)
+        canvas.restore()
+    }
+
+    private fun drawSkewedTextExample(canvas: Canvas) {
+        canvas.save()
+        paint.color = Color.YELLOW
+        paint.textAlign = Paint.Align.RIGHT
+        //Text position
+        canvas.translate(columnTwo, textRow)
+        canvas.skew(0.2f, 0.3f)
+        canvas.drawText(context.getString(R.string.skewed), clipRectLeft, clipRectTop, paint)
         canvas.restore()
     }
 
