@@ -86,11 +86,11 @@ class ClippedView @JvmOverloads constructor(
         canvas.save()
         canvas.translate(columnOne, rejectRow)
         canvas.clipRect(clipRectLeft, clipRectTop, clipRectRight, clipRectBottom)
-        if (canvas.quickReject(inClipRectangle, Canvas.EdgeType.AA)) {
+        if (canvas.quickReject(notInClipRectangle, Canvas.EdgeType.AA)) {
             canvas.drawColor(Color.WHITE)
         } else {
             canvas.drawColor(Color.BLACK)
-            canvas.drawRect(inClipRectangle, paint)
+            canvas.drawRect(notInClipRectangle, paint)
         }
 
         canvas.restore()
